@@ -1,7 +1,6 @@
 #include <iostream>
 #include <time.h>
 #include <cstdlib>
-#include <windows.h>
 
 using namespace std;
 void llenarAleatorio();
@@ -62,12 +61,12 @@ int main(int argc, char** argv) {
 			
 		}else{
 		    opcion2=2;//finaliza el bluce de juego
-		    if(juegoPerdido==true){ cout<<"*******Perdiste la partida*******"<<endl;}
-		    if(juegoGanado==true){ cout<<"*******Ganaste la partida*******"<<endl;}
+		    if(juegoPerdido==true){ cout<<"\n*******Perdiste la partida*******"<<endl;}
+		    if(juegoGanado==true){ cout<<"\n*******Ganaste la partida*******"<<endl;}
 		}
 	}while(opcion2!=2);
 	
-	cout<<"\t*********Fin del programa*********"<<endl;
+	cout<<"\n\t*********Fin del programa*********"<<endl;
 	return 0;
 }
 
@@ -87,7 +86,6 @@ int main(int argc, char** argv) {
         //destapar posicion
         MC[fila-1][columna-1]=1;  
         verificarGanar(cantMinasTotales);
-         
         mostrarTablero();
      }
 }
@@ -98,7 +96,7 @@ int cantMinas(){
         for(int j=0; j<n; j++){
            if(M[i][j]==1){
             totalMinas++;
-            cout<<"MINA"<<endl;
+            //cout<<"MINA"<<endl;
            }
         }
     }
@@ -106,8 +104,12 @@ int cantMinas(){
 }
 
 void mostrarTableroJuegoPerdido(){
-	char mina = 207;
+	char mina = 157; 
 	char noMina = 240;
+
+    cout<<"Esto es una mina: "<<mina<<endl;
+    cout<<"Esto NO es una mina: "<<noMina<<endl;
+
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
            if(M[i][j]==0){
@@ -137,7 +139,7 @@ void mostrarTablero(){
 void mostrarMatriz(){
      for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
-           cout<<M[i][j];
+           cout<<"\t"<<M[i][j];
         }
         cout<<"   "<<endl<<endl;
     }
@@ -145,36 +147,47 @@ void mostrarMatriz(){
 
 int calcularCercanos(int i,int j){
 	int minas=0;
-    if(M[i][j+1]==1){
+    if(M[i][j+1]==1 && (j+1)<n){
     	minas++;
+        //cout<<"MIna en "<<i<<" "<<j+1<<endl;
+        //cout<<"caso 1"<<endl;
 	}
-	if(M[i][j-1]==1){
-    	minas++;;
-	}
-	if(M[i+1][j]==1){
+	if(M[i][j-1]==1 && (j-1)>=0){
     	minas++;
+        //cout<<"MIna en "<<i<<" "<<j-1<<endl;
+        //cout<<"caso 2"<<endl;
 	}
-	if(M[i-1][j]==1){
-    	minas++;
+	if(M[i+1][j]==1 && (i+1)<n){
+    	minas++;//cout<<"MIna en "<<i+1<<" "<<j<<endl;
+        //cout<<"caso 3"<<endl;
+	}
+	if(M[i-1][j]==1 && (i-1)>=0){
+    	minas++;//cout<<"MIna en "<<i-1<<" "<<j<<endl;
+        //cout<<"caso 4"<<endl;
 	}
 	
 //diagonales
-	if(M[i-1][j+1]==1){
-    	minas++;
+	if(M[i-1][j+1]==1 && (i-1)>=0 && (j+1)<n){
+    	minas++;//cout<<"MIna en "<<i-1<<" "<<j+1<<endl;
+        //cout<<"caso 5"<<endl;
 	}
-	if(M[i-1][j-1]==1){
-    	minas++;;
+	if(M[i-1][j-1]==1 && (i-1)>=0 && (j-1)>=0){
+    	minas++;//cout<<"MIna en "<<i-1<<" "<<j-1<<endl;
+        //cout<<"caso 6"<<endl;
 	}
-	if(M[i+1][j+1]==1){
-    	minas++;
+	if(M[i+1][j+1]==1 && (i+1)<n && (j+1)<n){
+    	minas++;//cout<<"MIna en "<<i+1<<" "<<j<<endl;
+        //cout<<"caso 7"<<endl;
 	}
-	if(M[i+1][j-1]==1){
-    	minas++;
+	if(M[i+1][j-1]==1 && (i+1)<n && (j-1)>=0){
+    	minas++;//cout<<"MIna en "<<i+1<<" "<<j-1<<endl;
+       // cout<<"caso 8"<<endl;
 	}
     return minas;
 }
 
 void verificarGanar(int cantMinasTotales){
+    juegoGanado=false;
     int casillasTotales = n*n;
     int posicionesDescubiertas=0;
     //tu codigo acá 
@@ -185,21 +198,24 @@ void verificarGanar(int cantMinasTotales){
             }
         }
     }
-    cout<<"Verficando si ganamos"<<endl;
-    cout<<"casillas totales "<<casillasTotales<<endl;
-    cout<<"cantMinasTotales"<< cantMinasTotales<<endl;
-    cout<<posicionesDescubiertas<<endl;
-    cout<<"posiciones descubiertas"<<casillasTotales-cantMinasTotales<<endl;
+    // cout<<"Verficando si ganamos"<<endl;
+    // cout<<"casillas totales "<<casillasTotales<<endl;
+    // cout<<"cantMinasTotales"<< cantMinasTotales<<endl;
+    // cout<<"resta"<<casillasTotales-cantMinasTotales<<endl;
+    // cout<<"posiciones descubiertas"<<posicionesDescubiertas<<endl;
 
     if(casillasTotales-cantMinasTotales == posicionesDescubiertas){
         cout << "Has ganado!" << endl;
-        juegoGanado==true;
+        juegoGanado=true;
+    }
+    if(cantMinasTotales == 0){
+        cout<<"Y las minitas bro?"<<endl;
+        juegoGanado=true;
     }
     
-    juegoGanado=false;
 }
 void llenarAleatorio(){
-    int num, c;
+    int num;
     srand(time(NULL));
     for(int i=0; i<12; i++){
         for(int j=0; j<12; j++){
